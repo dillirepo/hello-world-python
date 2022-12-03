@@ -1,0 +1,26 @@
+pipeline {
+    environment {
+      //registry = "18.212.25.74:8001/repository/k8s-task/"
+      //registryCredential = 'nexus'
+      dockerImage = ''
+      SCANNER_HOME = tool 'sonarscanner'
+      }
+    agent any
+      stage('Building image') {
+        steps{
+          script {
+            sh 'docker build -t flask:6.0 .'
+          }
+         }
+        }
+      stage('Sonarqube') {
+        environment {
+            scannerHome = tool 'sonarqube'
+         }
+         steps {
+           withSonarQubeEnv('sonarqube') {
+             sh "${scannerHome}/bin/sonar-scanner"
+        }
+        }
+     }
+ }
