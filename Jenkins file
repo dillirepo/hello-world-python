@@ -6,16 +6,17 @@ pipeline {
       SCANNER_HOME = tool 'sonarscanner'
       }
     agent any
-      stage('Building image') {
-        steps{
-          script {
-            sh 'docker build -t flask:6.0 .'
-          }
+      stages{
+        stage('Building image') {
+          steps{
+            script {
+              sh 'docker build -t flask:6.0 .'
+            }
          }
         }
       stage('Sonarqube') {
         environment {
-            scannerHome = tool 'sonarqube'
+          scannerHome = tool 'sonarqube'
          }
          steps {
            withSonarQubeEnv('sonarqube') {
@@ -23,4 +24,5 @@ pipeline {
         }
         }
      }
+    } 
  }
